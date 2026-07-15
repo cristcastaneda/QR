@@ -33,7 +33,7 @@ public class PanelInventarioBodega extends JPanel {
 
         add(panelSuperior, BorderLayout.NORTH);
 
-        modeloTabla = new DefaultTableModel(new String[]{"Cod. Prod", "Cantidad Bodega", "Stock Min.", "Fecha Ult. Act."}, 0);
+        modeloTabla = new DefaultTableModel(new String[]{"Cod. Prod", "Producto", "Cantidad Bodega", "Stock Min.", "Fecha Ult. Act."}, 0);
         tablaInventario = new JTable(modeloTabla);
         JScrollPane scrollTabla = new JScrollPane(tablaInventario);
         scrollTabla.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));

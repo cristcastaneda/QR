@@ -18,7 +18,7 @@ public class PanelDespacho extends JPanel {
 
     public JTextField txtCodigo, txtFecha, txtCantidad;
     public JComboBox<String> cbEmpleados, cbMaquinas, cbProductos;
-    public JButton btnAgregarProducto, btnGuardar;
+    public JButton btnAgregarProducto, btnEliminarProducto, btnGuardar;
     public JTable tablaDetalle, tablaDespachos;
     public DefaultTableModel modeloDetalle, modeloTabla;
 
@@ -63,8 +63,10 @@ public class PanelDespacho extends JPanel {
 
         JPanel panelBotones = new JPanel();
         btnAgregarProducto = new JButton("Agregar Producto");
+        btnEliminarProducto = new JButton("Quitar Producto Seleccionado");
         btnGuardar = new JButton("Guardar Despacho");
         panelBotones.add(btnAgregarProducto);
+        panelBotones.add(btnEliminarProducto);
         panelBotones.add(btnGuardar);
         panelSuperior.add(panelBotones, BorderLayout.SOUTH);
 
@@ -75,7 +77,7 @@ public class PanelDespacho extends JPanel {
         tablaDetalle = new JTable(modeloDetalle);
         panelCentro.add(new JScrollPane(tablaDetalle));
 
-        modeloTabla = new DefaultTableModel(new String[]{"Cod. Despacho", "Fecha", "Cod. Emp", "Cod. Maq", "Cod. Prod", "Cantidad"}, 0);
+        modeloTabla = new DefaultTableModel(new String[]{"Cod. Despacho", "Fecha", "Cod. Emp", "Empleado", "Cod. Maq", "Maquina", "Cod. Prod", "Producto", "Cantidad"}, 0);
         tablaDespachos = new JTable(modeloTabla);
         panelCentro.add(new JScrollPane(tablaDespachos));
 

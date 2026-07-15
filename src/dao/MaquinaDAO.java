@@ -73,4 +73,20 @@ public class MaquinaDAO {
         }
         return listaMaquinas;
     }
+
+    public boolean eliminarMaquina(String codMaq) {
+        Conexion con = new Conexion();
+        Connection conexion = con.conectar();
+        String sql = "DELETE FROM MAQUINA WHERE cod_maq = ?";
+
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, codMaq);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar maquina: " + e);
+            return false;
+        } finally {
+            con.desconectar(conexion);
+        }
+    }
 }

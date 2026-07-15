@@ -1,22 +1,31 @@
 package modelo;
 
+import java.time.LocalDate;
+
 public class AlertaStock {
+    private String tipoAlerta;
     private String codProd;
     private String nomProd;
     private String ubicacion;
     private int cantidadActual;
     private int stockMin;
+    private LocalDate fechaVenc;
 
     public AlertaStock() {
     }
 
-    public AlertaStock(String codProd, String nomProd, String ubicacion, int cantidadActual, int stockMin) {
+    public AlertaStock(String tipoAlerta, String codProd, String nomProd, String ubicacion, int cantidadActual, int stockMin, LocalDate fechaVenc) {
+        this.tipoAlerta = tipoAlerta;
         this.codProd = codProd;
         this.nomProd = nomProd;
         this.ubicacion = ubicacion;
         this.cantidadActual = cantidadActual;
         this.stockMin = stockMin;
+        this.fechaVenc = fechaVenc;
     }
+
+    public String getTipoAlerta() { return tipoAlerta; }
+    public void setTipoAlerta(String tipoAlerta) { this.tipoAlerta = tipoAlerta; }
 
     public String getCodProd() { return codProd; }
     public void setCodProd(String codProd) { this.codProd = codProd; }
@@ -32,4 +41,7 @@ public class AlertaStock {
 
     public int getStockMin() { return stockMin; }
     public void setStockMin(int stockMin) { this.stockMin = stockMin; }
+
+    public LocalDate getFechaVenc() { return fechaVenc; }
+    public void setFechaVenc(LocalDate fechaVenc) { this.fechaVenc = fechaVenc; }
 }

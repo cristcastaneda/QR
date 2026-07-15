@@ -21,7 +21,7 @@ public class PanelAlertaStock extends JPanel {
         setLayout(new BorderLayout());
 
         JPanel panelSuperior = new JPanel(new BorderLayout());
-        JLabel lblTitulo = new JLabel("Alertas de Stock", SwingConstants.CENTER);
+        JLabel lblTitulo = new JLabel("Alertas de Stock y Vencimientos", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 22));
         lblTitulo.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         panelSuperior.add(lblTitulo, BorderLayout.NORTH);
@@ -33,7 +33,7 @@ public class PanelAlertaStock extends JPanel {
 
         add(panelSuperior, BorderLayout.NORTH);
 
-        modeloTabla = new DefaultTableModel(new String[]{"Cod. Prod", "Producto", "Ubicacion", "Cantidad", "Stock Min."}, 0);
+        modeloTabla = new DefaultTableModel(new String[]{"Tipo", "Cod. Prod", "Producto", "Ubicacion/Lote", "Cantidad", "Stock Min.", "Vence"}, 0);
         tablaAlertas = new JTable(modeloTabla);
         JScrollPane scrollTabla = new JScrollPane(tablaAlertas);
         scrollTabla.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));

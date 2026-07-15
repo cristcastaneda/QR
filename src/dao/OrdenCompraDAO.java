@@ -121,6 +121,7 @@ public class OrdenCompraDAO {
                     detalles.add(new DetalleOrdenCompra(
                         rs.getString("cod_ord_com"),
                         rs.getString("cod_prod"),
+                        rs.getDate("fecha_venc_lote").toLocalDate(),
                         rs.getInt("cant_sol"),
                         rs.getDouble("precio_uni"),
                         rs.getDouble("sub_total")

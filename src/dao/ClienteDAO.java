@@ -70,4 +70,20 @@ public class ClienteDAO {
         }
         return listaClientes;
     }
+
+    public boolean eliminarCliente(String codCli) {
+        Conexion con = new Conexion();
+        Connection conexion = con.conectar();
+        String sql = "DELETE FROM CLIENTE WHERE cod_cli = ?";
+
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, codCli);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar cliente: " + e);
+            return false;
+        } finally {
+            con.desconectar(conexion);
+        }
+    }
 }

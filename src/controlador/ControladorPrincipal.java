@@ -55,16 +55,23 @@ public class ControladorPrincipal implements ActionListener {
         this.vista.btnMaquinaria.addActionListener(this);
         this.vista.btnDespachos.addActionListener(this);
         this.vista.btnAlertas.addActionListener(this);
+        this.vista.btnCambiarRol.addActionListener(this);
 
         this.vista.panelFormularioProducto.btnGuardar.addActionListener(this);
+        this.vista.panelFormularioProducto.btnEliminar.addActionListener(this);
         this.vista.panelFormularioProveedor.btnGuardar.addActionListener(this);
+        this.vista.panelFormularioProveedor.btnEliminar.addActionListener(this);
         this.vista.panelFormularioEmpleado.btnGuardar.addActionListener(this);
+        this.vista.panelFormularioEmpleado.btnEliminar.addActionListener(this);
         this.vista.panelFormularioCliente.btnGuardar.addActionListener(this);
+        this.vista.panelFormularioCliente.btnEliminar.addActionListener(this);
         this.vista.panelFormularioMaquina.btnGuardar.addActionListener(this);
+        this.vista.panelFormularioMaquina.btnEliminar.addActionListener(this);
         this.vista.panelFormularioOrden.btnAgregarProducto.addActionListener(this);
         this.vista.panelFormularioOrden.btnGuardar.addActionListener(this);
         this.vista.panelFormularioOrden.btnCompletar.addActionListener(this);
         this.vista.panelFormularioDespacho.btnAgregarProducto.addActionListener(this);
+        this.vista.panelFormularioDespacho.btnEliminarProducto.addActionListener(this);
         this.vista.panelFormularioDespacho.btnGuardar.addActionListener(this);
         this.vista.panelInventarioBodega.btnActualizar.addActionListener(this);
         this.vista.panelInventarioMaquina.btnActualizar.addActionListener(this);
@@ -101,16 +108,23 @@ public class ControladorPrincipal implements ActionListener {
         else if (e.getSource() == vista.btnMaquinaria) vista.getCardLayout().show(vista.getPanelCentral(), "Maquinaria");
         else if (e.getSource() == vista.btnDespachos) vista.getCardLayout().show(vista.getPanelCentral(), "Despachos");
         else if (e.getSource() == vista.btnAlertas) vista.getCardLayout().show(vista.getPanelCentral(), "Alertas");
+        else if (e.getSource() == vista.btnCambiarRol) vista.cambiarInterfaz();
 
         if (e.getSource() == vista.panelFormularioProducto.btnGuardar) guardarProducto();
+        if (e.getSource() == vista.panelFormularioProducto.btnEliminar) eliminarProductoSeleccionado();
         if (e.getSource() == vista.panelFormularioProveedor.btnGuardar) guardarProveedor();
+        if (e.getSource() == vista.panelFormularioProveedor.btnEliminar) eliminarProveedorSeleccionado();
         if (e.getSource() == vista.panelFormularioEmpleado.btnGuardar) guardarEmpleado();
+        if (e.getSource() == vista.panelFormularioEmpleado.btnEliminar) eliminarEmpleadoSeleccionado();
         if (e.getSource() == vista.panelFormularioCliente.btnGuardar) guardarCliente();
+        if (e.getSource() == vista.panelFormularioCliente.btnEliminar) eliminarClienteSeleccionado();
         if (e.getSource() == vista.panelFormularioMaquina.btnGuardar) guardarMaquina();
+        if (e.getSource() == vista.panelFormularioMaquina.btnEliminar) eliminarMaquinaSeleccionada();
         if (e.getSource() == vista.panelFormularioOrden.btnAgregarProducto) agregarProductoAOrden();
         if (e.getSource() == vista.panelFormularioOrden.btnGuardar) guardarOrdenConDetalles();
         if (e.getSource() == vista.panelFormularioOrden.btnCompletar) completarOrdenSeleccionada();
         if (e.getSource() == vista.panelFormularioDespacho.btnAgregarProducto) agregarProductoADespacho();
+        if (e.getSource() == vista.panelFormularioDespacho.btnEliminarProducto) eliminarProductoDetalleDespacho();
         if (e.getSource() == vista.panelFormularioDespacho.btnGuardar) guardarDespachoConDetalles();
         if (e.getSource() == vista.panelInventarioBodega.btnActualizar) cargarTablaInventarioBodega();
         if (e.getSource() == vista.panelInventarioMaquina.btnActualizar) cargarTablaInventarioMaquina();
@@ -126,14 +140,13 @@ public class ControladorPrincipal implements ActionListener {
                 vista.panelFormularioProducto.txtCodigo.getText(),
                 vista.panelFormularioProducto.txtNombre.getText().trim(),
                 vista.panelFormularioProducto.txtCategoria.getText().trim(),
-                validarFecha(vista.panelFormularioProducto.txtFechaVenc.getText(), "fecha de vencimiento"),
                 validarDecimalPositivo(vista.panelFormularioProducto.txtPrecio.getText(), "precio"),
                 vista.panelFormularioProducto.txtUnidad.getText().trim()
             );
 
             if (productoDAO.registrarProducto(producto)) {
                 JOptionPane.showMessageDialog(null, "Producto registrado.");
-                limpiarCajas(vista.panelFormularioProducto.txtNombre, vista.panelFormularioProducto.txtCategoria, vista.panelFormularioProducto.txtFechaVenc, vista.panelFormularioProducto.txtPrecio, vista.panelFormularioProducto.txtUnidad);
+                limpiarCajas(vista.panelFormularioProducto.txtNombre, vista.panelFormularioProducto.txtCategoria, vista.panelFormularioProducto.txtPrecio, vista.panelFormularioProducto.txtUnidad);
                 cargarTablaProductos();
                 cargarComboBoxesDinamicos();
                 cargarCodigosAutomaticos();
@@ -256,13 +269,14 @@ public class ControladorPrincipal implements ActionListener {
             String item = vista.panelFormularioOrden.cbProductos.getSelectedItem().toString();
             String codProd = obtenerCodigoSeleccionado(item);
             String nomProd = obtenerNombreSeleccionado(item);
-            validarProductoNoRepetido(vista.panelFormularioOrden.modeloDetalle, codProd);
+            validarProductoNoRepetido(vista.panelFormularioOrden.modeloDetalle, codProd, nomProd);
+            LocalDate fechaVencLote = validarFecha(vista.panelFormularioOrden.txtFechaVencLote.getText(), "fecha de vencimiento del lote");
             int cantidad = validarEnteroPositivo(vista.panelFormularioOrden.txtCantidad.getText(), "cantidad");
             double precio = validarDecimalPositivo(vista.panelFormularioOrden.txtPrecioUnitario.getText(), "precio unitario");
             double subtotal = cantidad * precio;
 
-            vista.panelFormularioOrden.modeloDetalle.addRow(new Object[]{codProd, nomProd, cantidad, precio, subtotal});
-            limpiarCajas(vista.panelFormularioOrden.txtCantidad, vista.panelFormularioOrden.txtPrecioUnitario);
+            vista.panelFormularioOrden.modeloDetalle.addRow(new Object[]{codProd, nomProd, fechaVencLote, cantidad, precio, subtotal});
+            limpiarCajas(vista.panelFormularioOrden.txtFechaVencLote, vista.panelFormularioOrden.txtCantidad, vista.panelFormularioOrden.txtPrecioUnitario);
         } catch (Exception ex) {
             mostrarError(ex, "Error al agregar producto a la orden.");
         }
@@ -291,10 +305,11 @@ public class ControladorPrincipal implements ActionListener {
             List<DetalleOrdenCompra> detalles = new ArrayList<>();
             for (int i = 0; i < vista.panelFormularioOrden.modeloDetalle.getRowCount(); i++) {
                 String codProd = vista.panelFormularioOrden.modeloDetalle.getValueAt(i, 0).toString();
-                int cantidad = Integer.parseInt(vista.panelFormularioOrden.modeloDetalle.getValueAt(i, 2).toString());
-                double precio = Double.parseDouble(vista.panelFormularioOrden.modeloDetalle.getValueAt(i, 3).toString());
-                double subtotal = Double.parseDouble(vista.panelFormularioOrden.modeloDetalle.getValueAt(i, 4).toString());
-                detalles.add(new DetalleOrdenCompra(codOrden, codProd, cantidad, precio, subtotal));
+                LocalDate fechaVencLote = LocalDate.parse(vista.panelFormularioOrden.modeloDetalle.getValueAt(i, 2).toString());
+                int cantidad = Integer.parseInt(vista.panelFormularioOrden.modeloDetalle.getValueAt(i, 3).toString());
+                double precio = Double.parseDouble(vista.panelFormularioOrden.modeloDetalle.getValueAt(i, 4).toString());
+                double subtotal = Double.parseDouble(vista.panelFormularioOrden.modeloDetalle.getValueAt(i, 5).toString());
+                detalles.add(new DetalleOrdenCompra(codOrden, codProd, fechaVencLote, cantidad, precio, subtotal));
             }
 
             if (ordenDAO.registrarOrdenConDetalles(orden, detalles)) {
@@ -334,8 +349,9 @@ public class ControladorPrincipal implements ActionListener {
             String item = vista.panelFormularioDespacho.cbProductos.getSelectedItem().toString();
             String codProd = obtenerCodigoSeleccionado(item);
             String nomProd = obtenerNombreSeleccionado(item);
-            validarProductoNoRepetido(vista.panelFormularioDespacho.modeloDetalle, codProd);
+            validarProductoNoRepetido(vista.panelFormularioDespacho.modeloDetalle, codProd, nomProd);
             int cantidad = validarEnteroPositivo(vista.panelFormularioDespacho.txtCantidad.getText(), "cantidad");
+            validarStockDisponibleParaDespacho(codProd, cantidad);
             vista.panelFormularioDespacho.modeloDetalle.addRow(new Object[]{codProd, nomProd, cantidad});
             limpiarCajas(vista.panelFormularioDespacho.txtCantidad);
         } catch (Exception ex) {
@@ -380,6 +396,115 @@ public class ControladorPrincipal implements ActionListener {
         }
     }
 
+    private void eliminarProductoDetalleDespacho() {
+        int fila = vista.panelFormularioDespacho.tablaDetalle.getSelectedRow();
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(null, "Selecciona un producto del despacho actual.");
+            return;
+        }
+        vista.panelFormularioDespacho.modeloDetalle.removeRow(fila);
+    }
+
+    private void eliminarProductoSeleccionado() {
+        int fila = vista.panelFormularioProducto.tablaProductos.getSelectedRow();
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(null, "Selecciona un producto en la tabla.");
+            return;
+        }
+        String codigo = vista.panelFormularioProducto.modeloTabla.getValueAt(fila, 0).toString();
+        String nombre = vista.panelFormularioProducto.modeloTabla.getValueAt(fila, 1).toString();
+        if (confirmarEliminacion("producto", codigo, nombre) && productoDAO.eliminarProducto(codigo)) {
+            cargarTablaProductos();
+            cargarComboBoxesDinamicos();
+            cargarCodigosAutomaticos();
+            JOptionPane.showMessageDialog(null, "Producto eliminado.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo eliminar. Revisa si tiene ordenes, despachos o inventario asociado.");
+        }
+    }
+
+    private void eliminarProveedorSeleccionado() {
+        int fila = vista.panelFormularioProveedor.tablaProveedores.getSelectedRow();
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(null, "Selecciona un proveedor en la tabla.");
+            return;
+        }
+        String codigo = vista.panelFormularioProveedor.modeloTabla.getValueAt(fila, 0).toString();
+        String nombre = vista.panelFormularioProveedor.modeloTabla.getValueAt(fila, 1).toString();
+        if (confirmarEliminacion("proveedor", codigo, nombre) && proveedorDAO.eliminarProveedor(codigo)) {
+            cargarTablaProveedores();
+            cargarComboBoxesDinamicos();
+            cargarCodigosAutomaticos();
+            JOptionPane.showMessageDialog(null, "Proveedor eliminado.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo eliminar. Revisa si tiene ordenes asociadas.");
+        }
+    }
+
+    private void eliminarEmpleadoSeleccionado() {
+        int fila = vista.panelFormularioEmpleado.tablaEmpleados.getSelectedRow();
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(null, "Selecciona un empleado en la tabla.");
+            return;
+        }
+        String codigo = vista.panelFormularioEmpleado.modeloTabla.getValueAt(fila, 0).toString();
+        String nombre = vista.panelFormularioEmpleado.modeloTabla.getValueAt(fila, 1).toString();
+        if (confirmarEliminacion("empleado", codigo, nombre) && empleadoDAO.eliminarEmpleado(codigo)) {
+            cargarTablaEmpleados();
+            cargarComboBoxesDinamicos();
+            cargarCodigosAutomaticos();
+            JOptionPane.showMessageDialog(null, "Empleado eliminado.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo eliminar. Revisa si tiene ordenes o despachos asociados.");
+        }
+    }
+
+    private void eliminarClienteSeleccionado() {
+        int fila = vista.panelFormularioCliente.tablaClientes.getSelectedRow();
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(null, "Selecciona un cliente en la tabla.");
+            return;
+        }
+        String codigo = vista.panelFormularioCliente.modeloTabla.getValueAt(fila, 0).toString();
+        String nombre = vista.panelFormularioCliente.modeloTabla.getValueAt(fila, 1).toString();
+        if (confirmarEliminacion("cliente", codigo, nombre) && clienteDAO.eliminarCliente(codigo)) {
+            cargarTablaClientes();
+            cargarComboBoxesDinamicos();
+            cargarCodigosAutomaticos();
+            JOptionPane.showMessageDialog(null, "Cliente eliminado.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo eliminar. Revisa si tiene maquinas asociadas.");
+        }
+    }
+
+    private void eliminarMaquinaSeleccionada() {
+        int fila = vista.panelFormularioMaquina.tablaMaquinas.getSelectedRow();
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(null, "Selecciona una maquina en la tabla.");
+            return;
+        }
+        String codigo = vista.panelFormularioMaquina.modeloTabla.getValueAt(fila, 0).toString();
+        String nombre = vista.panelFormularioMaquina.modeloTabla.getValueAt(fila, 1).toString() + " - " + vista.panelFormularioMaquina.modeloTabla.getValueAt(fila, 2).toString();
+        if (confirmarEliminacion("maquina", codigo, nombre) && maquinaDAO.eliminarMaquina(codigo)) {
+            cargarTablaMaquinas();
+            cargarComboBoxesDinamicos();
+            cargarCodigosAutomaticos();
+            JOptionPane.showMessageDialog(null, "Maquina eliminada.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo eliminar. Revisa si tiene despachos o inventario asociado.");
+        }
+    }
+
+    private boolean confirmarEliminacion(String tipo, String codigo, String nombre) {
+        int opcion = JOptionPane.showConfirmDialog(
+            null,
+            "Deseas eliminar " + tipo + " " + codigo + " - " + nombre + "?",
+            "Confirmar eliminacion",
+            JOptionPane.YES_NO_OPTION
+        );
+        return opcion == JOptionPane.YES_OPTION;
+    }
+
     private void mostrarError(Exception ex, String mensajeGenerico) {
         String mensaje = ex instanceof IllegalArgumentException ? ex.getMessage() : mensajeGenerico;
         JOptionPane.showMessageDialog(null, mensaje);
@@ -397,11 +522,24 @@ public class ControladorPrincipal implements ActionListener {
         }
     }
 
-    private void validarProductoNoRepetido(DefaultTableModel modelo, String codProd) {
+    private void validarProductoNoRepetido(DefaultTableModel modelo, String codProd, String nomProd) {
         for (int i = 0; i < modelo.getRowCount(); i++) {
             if (codProd.equals(modelo.getValueAt(i, 0).toString())) {
-                throw new IllegalArgumentException("El producto " + codProd + " ya fue agregado a esta operacion.");
+                throw new IllegalArgumentException("El producto " + codProd + " - " + nomProd + " ya fue agregado a esta operacion.");
             }
+        }
+    }
+
+    private void validarStockDisponibleParaDespacho(String codProd, int cantidadNueva) {
+        int cantidadDisponible = inventarioBodegaDAO.obtenerCantidadDisponible(codProd);
+        int cantidadYaAgregada = 0;
+        for (int i = 0; i < vista.panelFormularioDespacho.modeloDetalle.getRowCount(); i++) {
+            if (codProd.equals(vista.panelFormularioDespacho.modeloDetalle.getValueAt(i, 0).toString())) {
+                cantidadYaAgregada += Integer.parseInt(vista.panelFormularioDespacho.modeloDetalle.getValueAt(i, 2).toString());
+            }
+        }
+        if (cantidadDisponible < cantidadYaAgregada + cantidadNueva) {
+            throw new IllegalArgumentException("No hay existencias suficientes en bodega. Disponible: " + cantidadDisponible + ".");
         }
     }
 
@@ -476,7 +614,7 @@ public class ControladorPrincipal implements ActionListener {
         DefaultTableModel modelo = vista.panelFormularioProducto.modeloTabla;
         modelo.setRowCount(0);
         for (Producto p : productoDAO.obtenerProductos()) {
-            modelo.addRow(new Object[]{p.getCodProd(), p.getNomProd(), p.getCategProd(), p.getFechaVenc(), p.getPrecioVenProd(), p.getUnidadMedProd()});
+            modelo.addRow(new Object[]{p.getCodProd(), p.getNomProd(), p.getCategProd(), p.getPrecioVenProd(), p.getUnidadMedProd()});
         }
     }
 
@@ -507,8 +645,9 @@ public class ControladorPrincipal implements ActionListener {
     private void cargarTablaMaquinas() {
         DefaultTableModel modelo = vista.panelFormularioMaquina.modeloTabla;
         modelo.setRowCount(0);
+        Map<String, String> clientes = mapaClientes();
         for (Maquina m : maquinaDAO.obtenerMaquinas()) {
-            modelo.addRow(new Object[]{m.getCodMaq(), m.getCodSerie(), m.getUbicMaq(), m.getEstadoMaq(), m.getFechaInsMaq(), m.getCodCli()});
+            modelo.addRow(new Object[]{m.getCodMaq(), m.getCodSerie(), m.getUbicMaq(), m.getEstadoMaq(), m.getFechaInsMaq(), m.getCodCli(), clientes.getOrDefault(m.getCodCli(), "")});
         }
     }
 
@@ -516,6 +655,9 @@ public class ControladorPrincipal implements ActionListener {
         DefaultTableModel modelo = vista.panelFormularioOrden.modeloTabla;
         modelo.setRowCount(0);
         Map<String, OrdenCompra> ordenes = new HashMap<>();
+        Map<String, String> proveedores = mapaProveedores();
+        Map<String, String> empleados = mapaEmpleados();
+        Map<String, String> productos = mapaProductos();
         for (OrdenCompra oc : ordenDAO.obtenerOrdenes()) {
             ordenes.put(oc.getCodOrdCom(), oc);
         }
@@ -524,7 +666,22 @@ public class ControladorPrincipal implements ActionListener {
         for (DetalleOrdenCompra detalle : detalles) {
             OrdenCompra oc = ordenes.get(detalle.getCodOrdCom());
             if (oc != null) {
-                modelo.addRow(new Object[]{oc.getCodOrdCom(), oc.getFechaOrdCom(), oc.getEstadoOrdCom(), oc.getFechaRecOrdCom(), oc.getCodPro(), oc.getCodEmp(), detalle.getCodProd(), detalle.getCantSol(), detalle.getPrecioUni(), detalle.getSubTotal()});
+                modelo.addRow(new Object[]{
+                    oc.getCodOrdCom(),
+                    oc.getFechaOrdCom(),
+                    oc.getEstadoOrdCom(),
+                    oc.getFechaRecOrdCom(),
+                    oc.getCodPro(),
+                    proveedores.getOrDefault(oc.getCodPro(), ""),
+                    oc.getCodEmp(),
+                    empleados.getOrDefault(oc.getCodEmp(), ""),
+                    detalle.getCodProd(),
+                    productos.getOrDefault(detalle.getCodProd(), ""),
+                    detalle.getFechaVencLote(),
+                    detalle.getCantSol(),
+                    detalle.getPrecioUni(),
+                    detalle.getSubTotal()
+                });
             }
         }
     }
@@ -533,6 +690,9 @@ public class ControladorPrincipal implements ActionListener {
         DefaultTableModel modelo = vista.panelFormularioDespacho.modeloTabla;
         modelo.setRowCount(0);
         Map<String, Despacho> despachos = new HashMap<>();
+        Map<String, String> empleados = mapaEmpleados();
+        Map<String, String> maquinas = mapaMaquinas();
+        Map<String, String> productos = mapaProductos();
         for (Despacho d : despachoDAO.obtenerDespachos()) {
             despachos.put(d.getCodDesp(), d);
         }
@@ -541,7 +701,17 @@ public class ControladorPrincipal implements ActionListener {
         for (DetalleDespacho detalle : detalles) {
             Despacho d = despachos.get(detalle.getCodDesp());
             if (d != null) {
-                modelo.addRow(new Object[]{d.getCodDesp(), d.getFechaDesp(), d.getCodEmp(), d.getCodMaq(), detalle.getCodProd(), detalle.getCantidadDesp()});
+                modelo.addRow(new Object[]{
+                    d.getCodDesp(),
+                    d.getFechaDesp(),
+                    d.getCodEmp(),
+                    empleados.getOrDefault(d.getCodEmp(), ""),
+                    d.getCodMaq(),
+                    maquinas.getOrDefault(d.getCodMaq(), ""),
+                    detalle.getCodProd(),
+                    productos.getOrDefault(detalle.getCodProd(), ""),
+                    detalle.getCantidadDesp()
+                });
             }
         }
     }
@@ -549,16 +719,19 @@ public class ControladorPrincipal implements ActionListener {
     private void cargarTablaInventarioBodega() {
         DefaultTableModel modelo = vista.panelInventarioBodega.modeloTabla;
         modelo.setRowCount(0);
+        Map<String, String> productos = mapaProductos();
         for (InventarioBodega inv : inventarioBodegaDAO.obtenerInventarios()) {
-            modelo.addRow(new Object[]{inv.getCodProd(), inv.getCantDisp(), inv.getStockMin(), inv.getFechaUltAct()});
+            modelo.addRow(new Object[]{inv.getCodProd(), productos.getOrDefault(inv.getCodProd(), ""), inv.getCantDisp(), inv.getStockMin(), inv.getFechaUltAct()});
         }
     }
 
     private void cargarTablaInventarioMaquina() {
         DefaultTableModel modelo = vista.panelInventarioMaquina.modeloTabla;
         modelo.setRowCount(0);
+        Map<String, String> maquinas = mapaMaquinas();
+        Map<String, String> productos = mapaProductos();
         for (InventarioMaquina inv : inventarioMaquinaDAO.obtenerInventarios()) {
-            modelo.addRow(new Object[]{inv.getCodMaq(), inv.getCodProd(), inv.getCantAct(), inv.getStockMin(), inv.getFechaUltRec()});
+            modelo.addRow(new Object[]{inv.getCodMaq(), maquinas.getOrDefault(inv.getCodMaq(), ""), inv.getCodProd(), productos.getOrDefault(inv.getCodProd(), ""), inv.getCantAct(), inv.getStockMin(), inv.getFechaUltRec()});
         }
     }
 
@@ -566,8 +739,48 @@ public class ControladorPrincipal implements ActionListener {
         DefaultTableModel modelo = vista.panelAlertaStock.modeloTabla;
         modelo.setRowCount(0);
         for (AlertaStock alerta : alertaStockDAO.obtenerAlertas()) {
-            modelo.addRow(new Object[]{alerta.getCodProd(), alerta.getNomProd(), alerta.getUbicacion(), alerta.getCantidadActual(), alerta.getStockMin()});
+            modelo.addRow(new Object[]{alerta.getTipoAlerta(), alerta.getCodProd(), alerta.getNomProd(), alerta.getUbicacion(), alerta.getCantidadActual(), alerta.getStockMin(), alerta.getFechaVenc()});
         }
+    }
+
+    private Map<String, String> mapaProductos() {
+        Map<String, String> mapa = new HashMap<>();
+        for (Producto p : productoDAO.obtenerProductos()) {
+            mapa.put(p.getCodProd(), p.getNomProd());
+        }
+        return mapa;
+    }
+
+    private Map<String, String> mapaProveedores() {
+        Map<String, String> mapa = new HashMap<>();
+        for (Proveedor p : proveedorDAO.obtenerProveedores()) {
+            mapa.put(p.getCodPro(), p.getNomPro());
+        }
+        return mapa;
+    }
+
+    private Map<String, String> mapaEmpleados() {
+        Map<String, String> mapa = new HashMap<>();
+        for (Empleado emp : empleadoDAO.obtenerEmpleados()) {
+            mapa.put(emp.getCodEmp(), emp.getNomEmp());
+        }
+        return mapa;
+    }
+
+    private Map<String, String> mapaClientes() {
+        Map<String, String> mapa = new HashMap<>();
+        for (Cliente c : clienteDAO.obtenerClientes()) {
+            mapa.put(c.getCodCli(), c.getNomCli());
+        }
+        return mapa;
+    }
+
+    private Map<String, String> mapaMaquinas() {
+        Map<String, String> mapa = new HashMap<>();
+        for (Maquina m : maquinaDAO.obtenerMaquinas()) {
+            mapa.put(m.getCodMaq(), m.getCodSerie() + " - " + m.getUbicMaq());
+        }
+        return mapa;
     }
 
     private void cargarComboBoxesDinamicos() {

@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class PanelOrdenCompra extends JPanel {
 
-    public JTextField txtCodigo, txtFecha, txtFechaRecepcion, txtCantidad, txtPrecioUnitario;
+    public JTextField txtCodigo, txtFecha, txtFechaRecepcion, txtFechaVencLote, txtCantidad, txtPrecioUnitario;
     public JComboBox<String> cbEstado, cbProveedores, cbEmpleados, cbProductos;
     public JButton btnAgregarProducto, btnGuardar, btnCompletar;
     public JTable tablaDetalle, tablaOrdenes;
@@ -57,18 +57,22 @@ public class PanelOrdenCompra extends JPanel {
         cbEmpleados = new JComboBox<>();
         panelCabecera.add(cbEmpleados);
 
-        JPanel panelProducto = new JPanel(new GridLayout(2, 4, 10, 8));
+        JPanel panelProducto = new JPanel(new GridLayout(2, 5, 10, 8));
         panelProducto.setBorder(BorderFactory.createTitledBorder("Producto a comprar"));
         panelProducto.add(new JLabel("Producto:"));
+        panelProducto.add(new JLabel("Vencimiento lote:"));
+        panelProducto.add(new JLabel("Cantidad:"));
+        panelProducto.add(new JLabel("Precio Unitario:"));
+        panelProducto.add(new JLabel("Accion:"));
+
         cbProductos = new JComboBox<>();
         panelProducto.add(cbProductos);
-        panelProducto.add(new JLabel("Cantidad:"));
+        txtFechaVencLote = new JTextField();
+        panelProducto.add(txtFechaVencLote);
         txtCantidad = new JTextField();
         panelProducto.add(txtCantidad);
-        panelProducto.add(new JLabel("Precio Unitario:"));
         txtPrecioUnitario = new JTextField();
         panelProducto.add(txtPrecioUnitario);
-        panelProducto.add(new JLabel(""));
         btnAgregarProducto = new JButton("Agregar Producto");
         panelProducto.add(btnAgregarProducto);
 
@@ -83,12 +87,12 @@ public class PanelOrdenCompra extends JPanel {
         panelBotones.add(btnCompletar);
         panelSuperior.add(panelBotones, BorderLayout.SOUTH);
 
-        modeloDetalle = new DefaultTableModel(new String[]{"Cod. Prod", "Producto", "Cantidad", "Precio", "Subtotal"}, 0);
+        modeloDetalle = new DefaultTableModel(new String[]{"Cod. Prod", "Producto", "Vence Lote", "Cantidad", "Precio", "Subtotal"}, 0);
         tablaDetalle = new JTable(modeloDetalle);
         JScrollPane scrollDetalle = new JScrollPane(tablaDetalle);
         scrollDetalle.setBorder(BorderFactory.createTitledBorder("Productos de la orden actual"));
 
-        modeloTabla = new DefaultTableModel(new String[]{"Cod. Orden", "Fecha", "Estado", "Fecha Rec.", "Cod. Prov", "Cod. Emp", "Cod. Prod", "Cant.", "Precio", "Subtotal"}, 0);
+        modeloTabla = new DefaultTableModel(new String[]{"Cod. Orden", "Fecha", "Estado", "Fecha Rec.", "Cod. Prov", "Proveedor", "Cod. Emp", "Empleado", "Cod. Prod", "Producto", "Vence Lote", "Cant.", "Precio", "Subtotal"}, 0);
         tablaOrdenes = new JTable(modeloTabla);
         JScrollPane scrollOrdenes = new JScrollPane(tablaOrdenes);
         scrollOrdenes.setBorder(BorderFactory.createTitledBorder("Ordenes registradas"));

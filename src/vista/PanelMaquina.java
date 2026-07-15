@@ -18,7 +18,7 @@ public class PanelMaquina extends JPanel {
 
     public JTextField txtCodigo, txtSerie, txtUbicacion, txtFechaIns;
     public JComboBox<String> cbEstado, cbClientes;
-    public JButton btnGuardar;
+    public JButton btnGuardar, btnEliminar;
     public JTable tablaMaquinas;
     public DefaultTableModel modeloTabla;
 
@@ -63,12 +63,14 @@ public class PanelMaquina extends JPanel {
 
         JPanel panelBoton = new JPanel();
         btnGuardar = new JButton("Guardar Maquina");
+        btnEliminar = new JButton("Eliminar Maquina Seleccionada");
         panelBoton.add(btnGuardar);
+        panelBoton.add(btnEliminar);
         panelSuperior.add(panelBoton, BorderLayout.SOUTH);
 
         add(panelSuperior, BorderLayout.NORTH);
 
-        modeloTabla = new DefaultTableModel(new String[]{"Codigo", "Serie", "Ubicacion", "Estado", "Fecha", "Cliente"}, 0);
+        modeloTabla = new DefaultTableModel(new String[]{"Codigo", "Serie", "Ubicacion", "Estado", "Fecha", "Cod. Cliente", "Cliente"}, 0);
         tablaMaquinas = new JTable(modeloTabla);
         JScrollPane scrollTabla = new JScrollPane(tablaMaquinas);
         scrollTabla.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));

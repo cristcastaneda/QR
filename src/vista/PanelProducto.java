@@ -14,31 +14,26 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 public class PanelProducto extends JPanel {
-    
-    // Componentes del formulario
-    public JTextField txtCodigo, txtNombre, txtCategoria, txtFechaVenc, txtPrecio, txtUnidad;
-    public JButton btnGuardar;
-    
-    // ¡NUEVO! Componentes para la tabla
+
+    public JTextField txtCodigo, txtNombre, txtCategoria, txtPrecio, txtUnidad;
+    public JButton btnGuardar, btnEliminar;
     public JTable tablaProductos;
     public DefaultTableModel modeloTabla;
 
     public PanelProducto() {
         setLayout(new BorderLayout());
-        
-        // --- 1. PANEL SUPERIOR: Formulario ---
+
         JPanel panelSuperior = new JPanel(new BorderLayout());
-        
-        JLabel lblTitulo = new JLabel("Gestión de Productos", SwingConstants.CENTER);
+
+        JLabel lblTitulo = new JLabel("Gestion de Productos", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 22));
         lblTitulo.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         panelSuperior.add(lblTitulo, BorderLayout.NORTH);
 
-        // Cuadrícula más compacta (3 filas, 4 columnas)
-        JPanel panelFormulario = new JPanel(new GridLayout(3, 4, 10, 10)); 
+        JPanel panelFormulario = new JPanel(new GridLayout(3, 4, 10, 10));
         panelFormulario.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        panelFormulario.add(new JLabel("Código:"));
+        panelFormulario.add(new JLabel("Codigo:"));
         txtCodigo = new JTextField();
         txtCodigo.setEditable(false);
         panelFormulario.add(txtCodigo);
@@ -47,13 +42,9 @@ public class PanelProducto extends JPanel {
         txtNombre = new JTextField();
         panelFormulario.add(txtNombre);
 
-        panelFormulario.add(new JLabel("Categoría:"));
+        panelFormulario.add(new JLabel("Categoria:"));
         txtCategoria = new JTextField();
         panelFormulario.add(txtCategoria);
-
-        panelFormulario.add(new JLabel("Vencimiento (YYYY-MM-DD):"));
-        txtFechaVenc = new JTextField();
-        panelFormulario.add(txtFechaVenc);
 
         panelFormulario.add(new JLabel("Precio:"));
         txtPrecio = new JTextField();
@@ -62,25 +53,26 @@ public class PanelProducto extends JPanel {
         panelFormulario.add(new JLabel("Unidad:"));
         txtUnidad = new JTextField();
         panelFormulario.add(txtUnidad);
+        panelFormulario.add(new JLabel(""));
+        panelFormulario.add(new JLabel(""));
 
         panelSuperior.add(panelFormulario, BorderLayout.CENTER);
 
         JPanel panelBoton = new JPanel();
         btnGuardar = new JButton("Guardar Producto");
+        btnEliminar = new JButton("Eliminar Producto Seleccionado");
         panelBoton.add(btnGuardar);
+        panelBoton.add(btnEliminar);
         panelSuperior.add(panelBoton, BorderLayout.SOUTH);
 
         add(panelSuperior, BorderLayout.NORTH);
 
-        // --- 2. PANEL INFERIOR: Tabla de Inventario ---
-        // Definimos las columnas de la tabla
-        modeloTabla = new DefaultTableModel(new String[]{"Código", "Nombre", "Categoría", "Vencimiento", "Precio", "Unidad"}, 0);
+        modeloTabla = new DefaultTableModel(new String[]{"Codigo", "Nombre", "Categoria", "Precio", "Unidad"}, 0);
         tablaProductos = new JTable(modeloTabla);
-        
-        // Metemos la tabla en un ScrollPane por si hay muchos productos
+
         JScrollPane scrollTabla = new JScrollPane(tablaProductos);
         scrollTabla.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
-        
+
         add(scrollTabla, BorderLayout.CENTER);
     }
 }

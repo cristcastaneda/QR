@@ -71,4 +71,20 @@ public class EmpleadoDAO {
         }
         return listaEmpleados;
     }
+
+    public boolean eliminarEmpleado(String codEmp) {
+        Conexion con = new Conexion();
+        Connection conexion = con.conectar();
+        String sql = "DELETE FROM EMPLEADO WHERE cod_emp = ?";
+
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, codEmp);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar empleado: " + e);
+            return false;
+        } finally {
+            con.desconectar(conexion);
+        }
+    }
 }

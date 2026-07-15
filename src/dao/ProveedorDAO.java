@@ -70,4 +70,20 @@ public class ProveedorDAO {
         }
         return listaProveedores;
     }
+
+    public boolean eliminarProveedor(String codPro) {
+        Conexion con = new Conexion();
+        Connection conexion = con.conectar();
+        String sql = "DELETE FROM PROVEEDOR WHERE cod_pro = ?";
+
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, codPro);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar proveedor: " + e);
+            return false;
+        } finally {
+            con.desconectar(conexion);
+        }
+    }
 }

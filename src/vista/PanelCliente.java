@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
 public class PanelCliente extends JPanel {
 
     public JTextField txtCodigo, txtNombre, txtDireccion, txtNit, txtContacto, txtTelefono;
-    public JButton btnGuardar;
+    public JButton btnGuardar, btnEliminar;
     public JTable tablaClientes;
     public DefaultTableModel modeloTabla;
 
@@ -61,7 +61,9 @@ public class PanelCliente extends JPanel {
 
         JPanel panelBoton = new JPanel();
         btnGuardar = new JButton("Guardar Cliente");
+        btnEliminar = new JButton("Eliminar Cliente Seleccionado");
         panelBoton.add(btnGuardar);
+        panelBoton.add(btnEliminar);
         panelSuperior.add(panelBoton, BorderLayout.SOUTH);
 
         add(panelSuperior, BorderLayout.NORTH);

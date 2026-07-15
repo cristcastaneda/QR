@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,13 +25,14 @@ public class DetalleOrdenCompraDAO {
     }
 
     public boolean registrarDetalle(Connection conexion, DetalleOrdenCompra detalle) throws SQLException {
-        String sql = "INSERT INTO DETALLE_ORDEN_COMPRA (cod_ord_com, cod_prod, cant_sol, precio_uni, sub_total) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO DETALLE_ORDEN_COMPRA (cod_ord_com, cod_prod, fecha_venc_lote, cant_sol, precio_uni, sub_total) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conexion.prepareStatement(sql)) {
             ps.setString(1, detalle.getCodOrdCom());
             ps.setString(2, detalle.getCodProd());
-            ps.setInt(3, detalle.getCantSol());
-            ps.setDouble(4, detalle.getPrecioUni());
-            ps.setDouble(5, detalle.getSubTotal());
+            ps.setDate(3, Date.valueOf(detalle.getFechaVencLote()));
+            ps.setInt(4, detalle.getCantSol());
+            ps.setDouble(5, detalle.getPrecioUni());
+            ps.setDouble(6, detalle.getSubTotal());
             ps.execute();
             return true;
         }
@@ -48,6 +50,7 @@ public class DetalleOrdenCompraDAO {
                 detalles.add(new DetalleOrdenCompra(
                     rs.getString("cod_ord_com"),
                     rs.getString("cod_prod"),
+                    rs.getDate("fecha_venc_lote").toLocalDate(),
                     rs.getInt("cant_sol"),
                     rs.getDouble("precio_uni"),
                     rs.getDouble("sub_total")

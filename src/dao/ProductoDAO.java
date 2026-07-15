@@ -1,7 +1,6 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,15 +26,14 @@ public class ProductoDAO {
     public boolean registrarProducto(Producto producto) {
         Conexion con = new Conexion();
         Connection conexion = con.conectar();
-        String sql = "INSERT INTO PRODUCTO (cod_prod, nom_prod, categ_prod, fecha_venc, precio_ven_prod, unidad_med_prod) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO PRODUCTO (cod_prod, nom_prod, categ_prod, precio_ven_prod, unidad_med_prod) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = conexion.prepareStatement(sql)) {
             ps.setString(1, producto.getCodProd());
             ps.setString(2, producto.getNomProd());
             ps.setString(3, producto.getCategProd());
-            ps.setDate(4, Date.valueOf(producto.getFechaVenc()));
-            ps.setDouble(5, producto.getPrecioVenProd());
-            ps.setString(6, producto.getUnidadMedProd());
+            ps.setDouble(4, producto.getPrecioVenProd());
+            ps.setString(5, producto.getUnidadMedProd());
             ps.execute();
             return true;
         } catch (SQLException e) {
@@ -59,9 +57,6 @@ public class ProductoDAO {
                 p.setCodProd(rs.getString("cod_prod"));
                 p.setNomProd(rs.getString("nom_prod"));
                 p.setCategProd(rs.getString("categ_prod"));
-                if (rs.getDate("fecha_venc") != null) {
-                    p.setFechaVenc(rs.getDate("fecha_venc").toLocalDate());
-                }
                 p.setPrecioVenProd(rs.getDouble("precio_ven_prod"));
                 p.setUnidadMedProd(rs.getString("unidad_med_prod"));
                 listaProductos.add(p);
@@ -72,5 +67,21 @@ public class ProductoDAO {
             con.desconectar(conexion);
         }
         return listaProductos;
+    }
+
+    public boolean eliminarProducto(String codProd) {
+        Conexion con = new Conexion();
+        Connection conexion = con.conectar();
+        String sql = "DELETE FROM PRODUCTO WHERE cod_prod = ?";
+
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, codProd);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar producto: " + e);
+            return false;
+        } finally {
+            con.desconectar(conexion);
+        }
     }
 }

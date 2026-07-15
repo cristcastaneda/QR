@@ -15,29 +15,25 @@ import javax.swing.table.DefaultTableModel;
 
 public class PanelProveedor extends JPanel {
 
-    // Componentes del formulario
     public JTextField txtCodigo, txtNombre, txtNit, txtTelefono, txtDireccion, txtContacto;
-    public JButton btnGuardar;
-    
-    // Componentes para la tabla
+    public JButton btnGuardar, btnEliminar;
     public JTable tablaProveedores;
     public DefaultTableModel modeloTabla;
 
     public PanelProveedor() {
         setLayout(new BorderLayout());
-        
-        // --- PANEL SUPERIOR: Formulario ---
+
         JPanel panelSuperior = new JPanel(new BorderLayout());
-        
-        JLabel lblTitulo = new JLabel("Gestión de Proveedores", SwingConstants.CENTER);
+
+        JLabel lblTitulo = new JLabel("Gestion de Proveedores", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 22));
         lblTitulo.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         panelSuperior.add(lblTitulo, BorderLayout.NORTH);
 
-        JPanel panelFormulario = new JPanel(new GridLayout(3, 4, 10, 10)); 
+        JPanel panelFormulario = new JPanel(new GridLayout(3, 4, 10, 10));
         panelFormulario.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        panelFormulario.add(new JLabel("Código:"));
+        panelFormulario.add(new JLabel("Codigo:"));
         txtCodigo = new JTextField();
         txtCodigo.setEditable(false);
         panelFormulario.add(txtCodigo);
@@ -50,11 +46,11 @@ public class PanelProveedor extends JPanel {
         txtNit = new JTextField();
         panelFormulario.add(txtNit);
 
-        panelFormulario.add(new JLabel("Teléfono:"));
+        panelFormulario.add(new JLabel("Telefono:"));
         txtTelefono = new JTextField();
         panelFormulario.add(txtTelefono);
 
-        panelFormulario.add(new JLabel("Dirección:"));
+        panelFormulario.add(new JLabel("Direccion:"));
         txtDireccion = new JTextField();
         panelFormulario.add(txtDireccion);
 
@@ -66,18 +62,19 @@ public class PanelProveedor extends JPanel {
 
         JPanel panelBoton = new JPanel();
         btnGuardar = new JButton("Guardar Proveedor");
+        btnEliminar = new JButton("Eliminar Proveedor Seleccionado");
         panelBoton.add(btnGuardar);
+        panelBoton.add(btnEliminar);
         panelSuperior.add(panelBoton, BorderLayout.SOUTH);
 
         add(panelSuperior, BorderLayout.NORTH);
 
-        // --- PANEL INFERIOR: Tabla ---
-        modeloTabla = new DefaultTableModel(new String[]{"Código", "Empresa", "NIT", "Teléfono", "Dirección", "Contacto"}, 0);
+        modeloTabla = new DefaultTableModel(new String[]{"Codigo", "Empresa", "NIT", "Telefono", "Direccion", "Contacto"}, 0);
         tablaProveedores = new JTable(modeloTabla);
-        
+
         JScrollPane scrollTabla = new JScrollPane(tablaProveedores);
         scrollTabla.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
-        
+
         add(scrollTabla, BorderLayout.CENTER);
     }
 }

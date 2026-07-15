@@ -18,7 +18,7 @@ public class PanelEmpleado extends JPanel {
 
     public JTextField txtCodigo, txtNombre, txtTelefono, txtFechaIngreso;
     public JComboBox<String> cbCargo;
-    public JButton btnGuardar;
+    public JButton btnGuardar, btnEliminar;
     public JTable tablaEmpleados;
     public DefaultTableModel modeloTabla;
 
@@ -62,7 +62,9 @@ public class PanelEmpleado extends JPanel {
 
         JPanel panelBoton = new JPanel();
         btnGuardar = new JButton("Guardar Empleado");
+        btnEliminar = new JButton("Eliminar Empleado Seleccionado");
         panelBoton.add(btnGuardar);
+        panelBoton.add(btnEliminar);
         panelSuperior.add(panelBoton, BorderLayout.SOUTH);
 
         add(panelSuperior, BorderLayout.NORTH);

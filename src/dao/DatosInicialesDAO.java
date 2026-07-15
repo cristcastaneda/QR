@@ -63,19 +63,19 @@ public class DatosInicialesDAO {
 
     private void insertarProductos(Connection conexion) throws SQLException {
         Object[][] productos = {
-            {"401", "Chocoramo", "Ponques", Date.valueOf("2026-08-30"), 2500.00, "Unidad"},
-            {"402", "Papas Margarita Limon 39g", "Snacks salados", Date.valueOf("2026-10-15"), 2200.00, "Unidad"},
-            {"403", "Galletas Festival Fresa", "Galletas", Date.valueOf("2026-11-10"), 1600.00, "Unidad"},
-            {"404", "Chocolatina Jet 12g", "Chocolates", Date.valueOf("2027-01-02"), 1000.00, "Unidad"},
-            {"405", "Todo Rico Original 45g", "Snacks salados", Date.valueOf("2026-09-21"), 2500.00, "Unidad"},
-            {"406", "Gomitas Trululu Casquitos", "Dulces", Date.valueOf("2027-02-19"), 2000.00, "Unidad"},
-            {"407", "Mani Moto Original", "Snacks", Date.valueOf("2026-12-11"), 1800.00, "Unidad"},
-            {"408", "Barquillos Piazza Chocolate", "Galletas", Date.valueOf("2026-10-05"), 1800.00, "Unidad"},
-            {"409", "Nucita Doble Sabor", "Dulces", Date.valueOf("2027-03-17"), 1200.00, "Unidad"},
-            {"4010", "Barrilete", "Dulces", Date.valueOf("2027-05-23"), 800.00, "Unidad"}
+            {"401", "Chocoramo", "Ponques", 2500.00, "Unidad"},
+            {"402", "Papas Margarita Limon 39g", "Snacks salados", 2200.00, "Unidad"},
+            {"403", "Galletas Festival Fresa", "Galletas", 1600.00, "Unidad"},
+            {"404", "Chocolatina Jet 12g", "Chocolates", 1000.00, "Unidad"},
+            {"405", "Todo Rico Original 45g", "Snacks salados", 2500.00, "Unidad"},
+            {"406", "Gomitas Trululu Casquitos", "Dulces", 2000.00, "Unidad"},
+            {"407", "Mani Moto Original", "Snacks", 1800.00, "Unidad"},
+            {"408", "Barquillos Piazza Chocolate", "Galletas", 1800.00, "Unidad"},
+            {"409", "Nucita Doble Sabor", "Dulces", 1200.00, "Unidad"},
+            {"4010", "Barrilete", "Dulces", 800.00, "Unidad"}
         };
         for (Object[] producto : productos) {
-            ejecutar(conexion, "INSERT INTO PRODUCTO VALUES (?, ?, ?, ?, ?, ?)", producto);
+            ejecutar(conexion, "INSERT INTO PRODUCTO VALUES (?, ?, ?, ?, ?)", producto);
         }
     }
 

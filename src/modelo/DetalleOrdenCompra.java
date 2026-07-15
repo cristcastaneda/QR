@@ -1,8 +1,11 @@
 package modelo;
 
+import java.time.LocalDate;
+
 public class DetalleOrdenCompra {
     private String codOrdCom;
     private String codProd;
+    private LocalDate fechaVencLote;
     private int cantSol;
     private double precioUni;
     private double subTotal;
@@ -10,9 +13,10 @@ public class DetalleOrdenCompra {
     public DetalleOrdenCompra() {
     }
 
-    public DetalleOrdenCompra(String codOrdCom, String codProd, int cantSol, double precioUni, double subTotal) {
+    public DetalleOrdenCompra(String codOrdCom, String codProd, LocalDate fechaVencLote, int cantSol, double precioUni, double subTotal) {
         this.codOrdCom = codOrdCom;
         this.codProd = codProd;
+        this.fechaVencLote = fechaVencLote;
         this.cantSol = cantSol;
         this.precioUni = precioUni;
         this.subTotal = subTotal;
@@ -23,6 +27,9 @@ public class DetalleOrdenCompra {
 
     public String getCodProd() { return codProd; }
     public void setCodProd(String codProd) { this.codProd = codProd; }
+
+    public LocalDate getFechaVencLote() { return fechaVencLote; }
+    public void setFechaVencLote(LocalDate fechaVencLote) { this.fechaVencLote = fechaVencLote; }
 
     public int getCantSol() { return cantSol; }
     public void setCantSol(int cantSol) { this.cantSol = cantSol; }

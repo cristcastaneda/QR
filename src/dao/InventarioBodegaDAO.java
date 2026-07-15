@@ -35,4 +35,24 @@ public class InventarioBodegaDAO {
         }
         return inventarios;
     }
+
+    public int obtenerCantidadDisponible(String codProd) {
+        Conexion con = new Conexion();
+        Connection conexion = con.conectar();
+        String sql = "SELECT cant_disp FROM INVENTARIO_BODEGA WHERE cod_prod = ?";
+
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, codProd);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("cant_disp");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al consultar stock de bodega: " + e);
+        } finally {
+            con.desconectar(conexion);
+        }
+        return 0;
+    }
 }
